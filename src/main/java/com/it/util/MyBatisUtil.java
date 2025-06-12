@@ -1,12 +1,4 @@
 package com.it.util;
-/**
- * Created with IntelliJ IDEA.
- *
- * @Package : com.it.util
- * @ClassName : MyBatisUtil.java
- * @Version : 1.0
- * @Description :
- */
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -16,6 +8,14 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Created with IntelliJ IDEA.
+ *
+ * @Package : com.it.util
+ * @ClassName : MyBatisUtil.java
+ * @Version : 1.0
+ * @Description :
+ */
 public class MyBatisUtil {
     private static SqlSessionFactory sqlSessionFactory;
     static {
