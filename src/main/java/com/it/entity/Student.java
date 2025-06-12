@@ -123,6 +123,23 @@ public class Student {
         sqlSession.close();
 
     }
+
+
+    public void queryScoreById(){
+
+    }
+
+    public void update() {
+
+    }
+
+    public void delete() {
+
+    }
+
+    public void queryScores(){
+
+    }
 }
 
 

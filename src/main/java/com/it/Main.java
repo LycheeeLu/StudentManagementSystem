@@ -31,11 +31,25 @@ public class Main {
                     student.insertScore();
                     break;
                 case "2":
-
+                    student.queryScoreById();
+                    break;
+                case "3":
+                    student.update();
+                    break;
+                case "4":
+                    student.delete();
+                    break;
+                case "5":
+                    student.queryScores();
+                    break;
+                case "6":
+                    System.exit(0);
+                    break;
+                default:
+                    break;
             }
 
         }
-
 
     }
 }
