@@ -125,38 +125,29 @@ public class Student {
 
     }
 
-
-    public void queryScoreById(){
-        SqlSession sqlSession = MyBatisUtil.getSession();
-        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("--- search grade by student id--- ");
-        // why not use query by id?
-        List<Student> students = studentMapper.showStudentList();
-        Student result = new Student();
-        Boolean flag = false;
-        if(students.isEmpty()){
-            System.out.println("No scores found! please input scores first");
-        } else {
-            System.out.print("Student id: ");
+    public void queryScoreById() {
+        try (SqlSession sqlSession = MyBatisUtil.getSession()) {
+            StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("--- search grade by student id ---\nStudent id: ");
             String id = scanner.nextLine();
-            for(Student student : students){
-                if(student.getId().equals(id)){
-                    flag = true;
-                    result = student;
-                }
-            }
 
-            if(flag){
-                System.out.println("student search success!");
-                System.out.println("student scores:");
-                System.out.format("%s\t%s\t\t%s\t\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", result.getId(), result.getGrade(), result.getName(), result.getMath(), result.getEnglish(), result.getSport(), result.getJava(), result.getCPlusPlus(), result.getPolicy(), result.getAlgorithm(), result.getAverage(), result.getScore());
+            Student student = studentMapper.queryById(id);
+
+            if (student != null) {
+                System.out.println("Student found!");
+                System.out.println("Student scores:");
+                System.out.format("%s\t%s\t\t%s\t\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+                        student.getId(), student.getGrade(), student.getName(),
+                        student.getMath(), student.getEnglish(), student.getSport(),
+                        student.getJava(), student.getCPlusPlus(), student.getPolicy(),
+                        student.getAlgorithm(), student.getAverage(), student.getScore());
             } else {
-                System.out.println("student search fail! No such student");
+                System.out.println("No such student.");
             }
         }
-        sqlSession.close();
     }
+
 
     public void update() {
     System.out.println("--- update student ---");
@@ -209,12 +200,11 @@ public class Student {
         Scanner scanner = new Scanner(System.in);
         System.out.print("id: ");
         String id = scanner.nextLine();
-
-        if(studentMapper.deleteById(id) > 0){
+        int rowsAffected = studentMapper.deleteById(id);
+        if(rowsAffected > 0){
             sqlSession.commit();
             System.out.println("student delete success!");
         } else {
-            sqlSession.rollback();
             System.out.println("student delete fail!");
         }
             sqlSession.close();
