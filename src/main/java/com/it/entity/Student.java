@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
 
+import java.util.List;
 import java.util.Scanner;
 
 import static com.sun.org.apache.xml.internal.utils.XMLChar.isValid;
@@ -126,19 +127,112 @@ public class Student {
 
 
     public void queryScoreById(){
+        SqlSession sqlSession = MyBatisUtil.getSession();
+        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("--- search grade by student id--- ");
+        // why not use query by id?
+        List<Student> students = studentMapper.showStudentList();
+        Student result = new Student();
+        Boolean flag = false;
+        if(students.isEmpty()){
+            System.out.println("No scores found! please input scores first");
+        } else {
+            System.out.print("Student id: ");
+            String id = scanner.nextLine();
+            for(Student student : students){
+                if(student.getId().equals(id)){
+                    flag = true;
+                    result = student;
+                }
+            }
 
+            if(flag){
+                System.out.println("student search success!");
+                System.out.println("student scores:");
+                System.out.format("%s\t%s\t\t%s\t\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", result.getId(), result.getGrade(), result.getName(), result.getMath(), result.getEnglish(), result.getSport(), result.getJava(), result.getCPlusPlus(), result.getPolicy(), result.getAlgorithm(), result.getAverage(), result.getScore());
+            } else {
+                System.out.println("student search fail! No such student");
+            }
+        }
+        sqlSession.close();
     }
 
     public void update() {
+    System.out.println("--- update student ---");
+    SqlSession sqlSession = MyBatisUtil.getSession();
+    StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("id: ");
+    String id = scanner.nextLine();
+    Student student = studentMapper.queryById(id);
+
+    //what kind of simplified methods can i extract from here hmmms
+    System.out.print("math: ");
+    math = Double.valueOf(scanner.nextLine());
+    System.out.print("english: ");
+    english = Double.valueOf(scanner.nextLine());
+    System.out.print("sport: ");
+    sport = Double.valueOf(scanner.nextLine());
+    System.out.print("java: ");
+    java = Double.valueOf(scanner.nextLine());
+    System.out.print("algorithm: ");
+    algorithm = Double.valueOf(scanner.nextLine());
+    System.out.print("policy: ");
+    policy = Double.valueOf(scanner.nextLine());
+    System.out.print("cPlusPlus: ");
+    cPlusPlus = Double.valueOf(scanner.nextLine());
+
+    student.setMath(math);
+    student.setEnglish(english);
+    student.setSport(sport);
+    student.setJava(java);
+    student.setAlgorithm(algorithm);
+    student.setPolicy(policy);
+    student.setCPlusPlus(cPlusPlus);
+    student.setScore(sport + math + english + policy + java + cPlusPlus + algorithm);
+    student.setAverage(student.getScore() / 7);
+
+    if(studentMapper.updateById(student) > 0){
+        sqlSession.commit();
+        System.out.println("student update success!");
+    } else {
+        sqlSession.rollback();
+        System.out.println("student update fail!");
+    }
     }
 
     public void delete() {
+        SqlSession sqlSession = MyBatisUtil.getSession();
+        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("id: ");
+        String id = scanner.nextLine();
 
+        if(studentMapper.deleteById(id) > 0){
+            sqlSession.commit();
+            System.out.println("student delete success!");
+        } else {
+            sqlSession.rollback();
+            System.out.println("student delete fail!");
+        }
+            sqlSession.close();
     }
 
     public void queryScores(){
-
+        SqlSession sqlSession = MyBatisUtil.getSession();
+        StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+        List<Student> students = studentMapper.showStudentList();
+        if(students.isEmpty()){
+            System.out.println("No scores found! please input scores first");
+        } else {
+            System.out.print("all student grade displayed: ");
+            for(Student student : students){
+                System.out.format("%s\t%s\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", student.getId(), student.getGrade(), student.getName(), student.getMath(), student.getEnglish(), student.getSport(), student.getJava(), student.getCPlusPlus(), student.getPolicy(), student.getAlgorithm(), student.getAverage(), student.getScore());
+            }
+        }
+    sqlSession.close();
     }
 }
 
