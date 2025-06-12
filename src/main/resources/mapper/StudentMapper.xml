@@ -8,7 +8,7 @@
                              java, c_plus_plus, algorithm, score, average)
         VALUES (#{id}, #{name},#{grade},#{math},
                 #{english},#{sport},#{policy},#{java},
-                #{c_plus_plus},#{algorithm},#{score},#{average})
+                #{cPlusPlus},#{algorithm},#{score},#{average})
     </insert>
 
     <update id="updateById" parameterType="com.it.entity.Student">
@@ -25,7 +25,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="deleteByid">
+    <delete id="deleteById">
         DELETE
         FROM student
         WHERE id = #{id}

@@ -11,7 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.sun.org.apache.xml.internal.utils.XMLChar.isValid;
+
 
 
 /**
@@ -57,11 +57,7 @@ public class Student {
         while(true){
             System.out.print("id: ");
             id = scanner.nextLine();
-            if(isValid(Integer.valueOf(id))){
-                System.out.print("this id already exists! give a new one");
-            } else {
-                break;
-            }
+            break;
         }
 
         System.out.print("name: ");
